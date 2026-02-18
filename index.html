@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en"><head><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-1CQ4D3VQ3L"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-1CQ4D3VQ3L');
+  </script>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+
+<title>Plasma Globe: Interactive High-Voltage Simulation</title>
+
+<meta name="description" content="Experience a stunning interactive plasma globe. Customize electric filaments, bloom effects, and core gases in this high-fidelity WebGL simulation.">
+<meta name="keywords" content="plasma globe, WebGL, Three.js, simulation, visualizer, interactive art, sci-fi UI, electric effects, particle simulation, 3D graphics">
+<meta name="author" content="Chris Pirillo">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0f172a">
+
+<meta property="og:site_name" content="Chris Pirillo's Arcade">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Plasma Globe: Interactive High-Voltage Simulation">
+<meta property="og:description" content="Experience a stunning interactive plasma globe. Customize electric filaments, bloom effects, and core gases in this high-fidelity WebGL simulation.">
+<meta property="og:url" content="https://pirillo.com/arcade/plasma-globe.html">
+<meta property="og:image" content="https://pirillo.com/arcade/images/plasma-globe.png">
+<meta property="og:image:alt" content="Plasma Globe: Interactive High-Voltage Simulation">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ChrisPirillo">
+<meta name="twitter:creator" content="@ChrisPirillo">
+<meta name="twitter:title" content="Plasma Globe: Interactive High-Voltage Simulation">
+<meta name="twitter:description" content="Experience a stunning interactive plasma globe. Customize electric filaments, bloom effects, and core gases in this high-fidelity WebGL simulation.">
+<meta name="twitter:image" content="https://pirillo.com/arcade/images/plasma-globe.png">
+<meta name="twitter:domain" content="pirillo.com">
+
+<link rel="canonical" href="https://pirillo.com/arcade/plasma-globe.html">
+
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Plasma Globe: Interactive High-Voltage Simulation",
+  "description": "Experience a stunning interactive plasma globe. Customize electric filaments, bloom effects, and core gases in this high-fidelity WebGL simulation.",
+  "keywords": "plasma globe, WebGL, Three.js, simulation, visualizer, interactive art, sci-fi UI, electric effects, particle simulation, 3D graphics",
+  "url": "https://pirillo.com/arcade/plasma-globe.html",
+  "image": "https://pirillo.com/arcade/images/plasma-globe.png",
+  "primaryImageOfPage": {
+    "@type": "ImageObject",
+    "url": "https://pirillo.com/arcade/images/plasma-globe.png"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Chris Pirillo",
+    "url": "https://pirillo.com",
+    "sameAs": [
+      "https://x.com/ChrisPirillo"
+    ]
+  },
+  "mainEntity": {
+    "name": "Plasma Globe: Interactive High-Voltage Simulation",
+    "description": "Experience a stunning interactive plasma globe. Customize electric filaments, bloom effects, and core gases in this high-fidelity WebGL simulation.",
+    "image": "https://pirillo.com/arcade/images/plasma-globe.png",
+    "operatingSystem": "Web Browser",
+    "author": {
+      "@type": "Person",
+      "name": "Chris Pirillo"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "availability": "https://schema.org/InStock"
+    },
+    "@type": "WebApplication",
+    "applicationCategory": "Simulation"
+  }
+}</script>
+
+<meta charset="UTF-8">
+<link rel="preconnect" href="https://fonts.googleapis.com&amp;display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&amp;family=Rajdhani:wght@400;600&amp;display=swap" rel="stylesheet">
+<style>:root { --bg-color: #000000; --panel-bg: rgba(5, 5, 5, 0.95); --panel-border: #00ffff; --text-main: #e0e0e0; --text-muted: #888; --accent-primary: #00ffff; --accent-secondary: #ff00ff; --accent-glow: rgba(0, 255, 255, 0.4); --font-header: 'Orbitron', sans-serif; --font-ui: 'Rajdhani', sans-serif; }
+body { margin: 0; overflow: hidden; background-color: var(--bg-color); touch-action: none; font-family: var(--font-ui); color: var(--text-main); user-select: none; -webkit-user-select: none; }
+#canvas-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+#fade-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: black; opacity: 1; pointer-events: none; z-index: 1000; transition: opacity 0.6s ease-in-out; }
+.ui-layer { position: absolute; z-index: 100; pointer-events: none; top: 0; left: 0; width: 100%; height: 100%; }
+#menu-btn { position: absolute; top: 25px; right: 25px; width: 50px; height: 50px; background: rgba(0,0,0,0.8); border: 2px solid var(--accent-primary); box-shadow: 0 0 15px var(--accent-glow); cursor: pointer; pointer-events: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s ease; clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%); opacity: 1; visibility: visible; }
+#menu-btn.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+#menu-btn:hover { background: var(--accent-primary); box-shadow: 0 0 25px var(--accent-primary); }
+.menu-bar { width: 24px; height: 2px; background-color: var(--accent-primary); transition: background-color 0.2s; }
+#menu-btn:hover .menu-bar { background-color: #000; }
+#settings-panel { position: absolute; top: 0; right: 0; width: 400px; height: 100%; background: var(--panel-bg); border-left: 2px solid var(--accent-primary); transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); display: flex; flex-direction: column; pointer-events: auto; box-shadow: -20px 0 50px rgba(0,0,0,0.9); }
+#settings-panel.open { transform: translateX(0); }
+.panel-header { padding: 25px; border-bottom: 2px solid var(--accent-primary); display: flex; justify-content: space-between; align-items: center; background: linear-gradient(90deg, rgba(0,255,255,0.1) 0%, rgba(0,0,0,0) 100%); flex-shrink: 0; }
+.header-title-group { display: flex; align-items: center; gap: 15px; }
+.panel-header h2 { margin: 0; font-family: var(--font-header); font-size: 20px; font-weight: 700; letter-spacing: 2px; color: var(--accent-primary); text-shadow: 0 0 10px var(--accent-glow); text-transform: uppercase; }
+.info-btn { width: 24px; height: 24px; border: 1px solid var(--accent-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--font-header); font-size: 14px; color: var(--accent-primary); cursor: pointer; transition: all 0.2s; box-shadow: 0 0 5px var(--accent-glow); }
+.info-btn:hover { background: var(--accent-primary); color: #000; box-shadow: 0 0 15px var(--accent-primary); }
+.close-btn { background: none; border: none; color: var(--text-muted); font-family: var(--font-header); font-size: 32px; cursor: pointer; padding: 0; line-height: 0.8; transition: color 0.2s; }
+.close-btn:hover { color: var(--accent-secondary); text-shadow: 0 0 10px var(--accent-secondary); }
+.panel-body { flex-grow: 1; overflow-y: auto; padding: 25px; }
+.panel-body::-webkit-scrollbar { width: 8px; }
+.panel-body::-webkit-scrollbar-track { background: #000; }
+.panel-body::-webkit-scrollbar-thumb { background: #333; border: 1px solid #555; }
+.panel-body::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
+.btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+.action-btn { background: rgba(0,0,0,0.6); border: 1px solid var(--accent-primary); color: var(--accent-primary); padding: 15px; cursor: pointer; font-family: var(--font-header); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; text-align: center; position: relative; white-space: nowrap; clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
+.action-btn:hover { background: var(--accent-primary); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
+.action-btn.primary { border-color: var(--accent-secondary); color: var(--accent-secondary); }
+.action-btn.primary:hover { background: var(--accent-secondary); color: #000; box-shadow: 0 0 20px var(--accent-secondary); }
+.action-btn.full-width { width: 100%; margin-bottom: 30px; }
+.section-header { font-family: var(--font-header); font-size: 14px; color: #fff; margin: 30px 0 15px 0; padding-bottom: 8px; border-bottom: 1px dashed #444; display: flex; align-items: center; gap: 10px; }
+.section-header::before { content: ''; display: block; width: 6px; height: 6px; background: var(--accent-primary); box-shadow: 0 0 5px var(--accent-primary); }
+.section-header:first-of-type { margin-top: 0; }
+.control-group { margin-bottom: 20px; position: relative; }
+.control-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; }
+.control-group label { font-size: 14px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.value-display { font-family: var(--font-header); font-size: 14px; color: var(--accent-primary); text-shadow: 0 0 5px var(--accent-glow); }
+input[type="range"] { -webkit-appearance: none; width: 100%; height: 6px; background: #222; outline: none; border: 1px solid #444; margin: 0; }
+input[type="range"]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: linear-gradient(90deg, #111, #111); }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 10px; background: #000; border: 2px solid var(--accent-primary); cursor: pointer; margin-top: -7px; box-shadow: 0 0 10px var(--accent-glow); transition: transform 0.1s, background 0.1s; }
+input[type="range"]::-webkit-slider-thumb:hover { background: var(--accent-primary); transform: scale(1.1); }
+.color-wrapper { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); padding: 8px 12px; border: 1px solid #333; margin-bottom: 10px; }
+input[type="color"] { -webkit-appearance: none; width: 40px; height: 30px; border: none; background: none; cursor: pointer; padding: 0; }
+input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+input[type="color"]::-webkit-color-swatch { border: 2px solid #555; border-radius: 4px; }
+.checkbox-row { display: flex; align-items: center; justify-content: space-between; padding: 10px; background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.2); margin-bottom: 15px; }
+input[type="checkbox"] { appearance: none; width: 20px; height: 20px; border: 2px solid var(--accent-primary); background: #000; cursor: pointer; position: relative; }
+input[type="checkbox"]:checked { background: var(--accent-primary); box-shadow: 0 0 10px var(--accent-glow); }
+#info-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); pointer-events: auto; }
+#info-modal.active { display: flex; }
+.modal-content { background: #050505; width: 90%; max-width: 500px; padding: 40px; border: 2px solid var(--accent-primary); box-shadow: 0 0 50px var(--accent-glow), inset 0 0 20px rgba(0,0,0,0.8); text-align: center; position: relative; clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px); }
+.modal-content h3 { margin-top: 0; color: var(--accent-primary); font-family: var(--font-header); font-size: 24px; text-transform: uppercase; letter-spacing: 4px; text-shadow: 0 0 15px var(--accent-glow); margin-bottom: 20px; }
+.modal-content p { color: #ccc; line-height: 1.6; font-size: 16px; margin-bottom: 30px; }
+.modal-links { display: flex; flex-direction: column; gap: 15px; }
+.modal-links a { color: var(--accent-primary); text-decoration: none; border: 1px solid var(--accent-primary); padding: 15px; background: rgba(0,0,0,0.5); font-family: var(--font-header); font-size: 14px; text-transform: uppercase; letter-spacing: 2px; transition: all 0.2s; }
+.modal-links a:hover { background: var(--accent-primary); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
+.modal-close-hint { margin-top: 20px; font-size: 12px; color: #666; font-family: var(--font-header); }
+@media (max-width: 768px) { #settings-panel { width: 100%; height: 75%; top: auto; bottom: 0; transform: translateY(100%); border-left: none; border-top: 2px solid var(--accent-primary); }
+#settings-panel.open { transform: translateY(0); }
+#menu-btn { top: 15px; right: 15px; }
+.panel-body { padding: 20px; }
+}</style>
+<script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body><h1 style="display: none;">Plasma Globe: Interactive High-Voltage Simulation</h1>
+
+    <!-- Canvas -->
+    <div id="canvas-container"></div>
+    
+    <!-- Transition Overlay -->
+    <div id="fade-overlay"></div>
+
+    <!-- UI Layer -->
+    <div class="ui-layer">
+        <!-- Menu Trigger -->
+        <button id="menu-btn" title="Settings">
+            <div class="menu-bar"></div>
+            <div class="menu-bar"></div>
+            <div class="menu-bar"></div>
+        </button>
+
+        <!-- Settings Panel -->
+        <div id="settings-panel">
+            <div class="panel-header">
+                <div class="header-title-group">
+                    <h2>Plasma Globe</h2>
+                    <div class="info-btn" id="btn-info" title="About">?</div>
+                </div>
+                <button class="close-btn" id="panel-close">×</button>
+            </div>
+            
+            <div class="panel-body">
+                
+                <div class="section-header">CORE OPERATIONS</div>
+                <div class="btn-grid">
+                    <button class="action-btn primary" id="btn-randomize">⚡ RANDOMIZE</button>
+                    <button class="action-btn" id="btn-reset">↺ DEFAULTS</button>
+                </div>
+                <button class="action-btn full-width" id="btn-wallpaper">📷 EXPORT 4K WALLPAPER</button>
+
+                <!-- Dynamic Controls inserted here by JS -->
+                <div id="controls-container"></div>
+
+                <div class="section-header">SYSTEM I/O</div>
+                <div class="control-group">
+                    <div class="checkbox-row">
+                        <label style="margin:0; color:#fff;">AUTO-RANDOMIZE</label>
+                        <input type="checkbox" id="chk-auto">
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="control-header">
+                            <label>Interval Timer</label>
+                            <span class="value-display"><span id="val-timer">5</span>s</span>
+                        </div>
+                        <input type="range" id="inp-timer" min="1" max="20" step="1" value="5">
+                    </div>
+
+                    <div class="btn-grid" style="margin-top: 20px;">
+                        <button class="action-btn" id="btn-export-json">EXPORT SETTINGS</button>
+                        <button class="action-btn" id="btn-import-json">IMPORT SETTINGS</button>
+                    </div>
+                    <input type="file" id="file-input" accept=".json" style="display: none;">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div id="info-modal">
+        <div class="modal-content">
+            <h3>PLASMA GLOBE</h3>
+            <p>Interactive high-voltage clinging surface gas simulation.<br>WebGL 2.0 // Three.js // Fat Lines</p>
+            <div class="modal-links">
+                <a href="https://pirillo.com/arcade/" target="_blank">More Apps</a>
+                <a href="https://chris.pirillo.com/" target="_blank">Follow Chris</a>
+                <a href="https://ctrlaltcreate.live/" target="_blank">Learn More</a>
+            </div>
+            <div class="modal-close-hint">[ESC] TO CLOSE TERMINAL</div>
+        </div>
+    </div>
+
+<script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+    import { Line2 } from 'three/addons/lines/Line2.js';
+    import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+    import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
+
+    // --- STATE MANAGEMENT ---
+
+    const DEFAULTS = {
+        radius: 12,
+        strands: 45,
+        segments: 60,
+        magnetism: 15,
+        boltWidth: 0.15, // Master bolt width
+        strandWidth: 0.05, // Individual strand width
+        strandWiggle: 1.0, // Multiplier for strand turbulence
+        glassColor: "#ffffff",
+        bloomStrength: 1.2,
+        bloomRadius: 0.3,
+        bloomThreshold: 0.1,
+        baseColor: "#3366ff",
+        tipColor: "#ff00cc",
+        innerGasColor: "#ff3c3c", // This matches the original Red (rgba 255,60,60)
+        autoAdvance: false,
+        autoInterval: 5,
+        simulationSpeed: 1.0,
+        riseSpeed: 0.08,
+        electrodeSize: 1.5,
+        rotateSpeed: 0.3
+    };
+
+    let state = { ...DEFAULTS };
+    let globalTime = 0; 
+
+    // --- THREE.JS SETUP ---
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x050505, 0.025);
+
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 200);
+    camera.position.z = 38;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance", preserveDrawingBuffer: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enablePan = false;
+    controls.minDistance = 20;
+    controls.maxDistance = 60;
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.autoRotate = true; 
+    controls.autoRotateSpeed = state.rotateSpeed;
+    controls.minPolarAngle = Math.PI / 2;
+    controls.maxPolarAngle = Math.PI / 2;
+
+    const composer = new EffectComposer(renderer);
+    const renderPass = new RenderPass(scene, camera);
+    composer.addPass(renderPass);
+
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.1, 0.5);
+    composer.addPass(bloomPass);
+
+    // --- OBJECTS ---
+    
+    // Glass
+    let glassGlobe, glassMaterial, glassGeometry;
+    
+    // Electrode
+    let electrode;
+    
+    // Hit Sphere for Raycasting (Invisible)
+    const hitSphere = new THREE.Mesh(
+        new THREE.SphereGeometry(1, 16, 16), 
+        new THREE.MeshBasicMaterial({ visible: false })
+    );
+    scene.add(hitSphere);
+
+    // Interaction Materials
+    let organicTipMat, innerGasMat, masterTipMesh, innerGasMesh;
+    let strands = [];
+    let masterThickBolt;
+    
+    // Textures
+    const tipMistTex = createGasTexture('rgba(255, 255, 255, 0.6)'); 
+    const coreMistTex = createGasTexture('rgba(255, 255, 255, 0.3)');
+    const padGeometry = new THREE.PlaneGeometry(1, 1);
+
+    // Jitter Logic
+    const MasterBoltJitter = {
+        warpX: 0, warpY: 0, warpZ: 0,
+        nextSnap: 0,
+        update(time) {
+            if (time > this.nextSnap) {
+                this.warpX = (Math.random() - 0.5) * 5.0;
+                this.warpY = (Math.random() - 0.5) * 5.0;
+                this.warpZ = (Math.random() - 0.5) * 5.0;
+                this.nextSnap = time + 0.03 + Math.random() * 0.07;
+            }
+        }
+    };
+
+    // --- CLASS DEFINITIONS ---
+
+    function createGasTexture(colorBase) {
+        const canvas = document.createElement('canvas');
+        canvas.width = 128; canvas.height = 128; 
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, 128, 128);
+        const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 60);
+        grad.addColorStop(0.0, colorBase);       
+        grad.addColorStop(0.3, colorBase); 
+        grad.addColorStop(1.0, 'rgba(0,0,0,0)'); 
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(64, 64, 60, 0, Math.PI*2);
+        ctx.fill();
+        const tex = new THREE.CanvasTexture(canvas);
+        tex.needsUpdate = true;
+        return tex;
+    }
+
+    class PlasmaBolt {
+        constructor() {
+            this.mesh = null;
+            this.pad = null;
+            this.corePad = null;
+            this.geometry = null;
+            this.material = null;
+            this.target = new THREE.Vector3();
+            this.currentEnd = new THREE.Vector3();
+            this.lift = 0;
+            this.maxLift = 0;
+            this.phase = 0;
+            this.positions = []; // Store positions to avoid alloc
+            this.colors = [];
+            this.init();
+        }
+
+        init() {
+            // Using Line2 for width support
+            const count = state.segments;
+            this.geometry = new LineGeometry();
+            
+            // FIX: Initialize with dummy data to prevent Line2 crash reading 'count' on empty geometry
+            this.geometry.setPositions([0,0,0, 0,1,0]);
+
+            this.material = new LineMaterial({
+                color: 0xffffff,
+                linewidth: state.strandWidth, 
+                vertexColors: true,
+                dashed: false,
+                alphaToCoverage: true,
+                worldUnits: true, // IMPORTANT: Allows width in world units
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                opacity: 0.8
+            });
+            
+            // Initial sizing
+            this.material.resolution.set(window.innerWidth, window.innerHeight);
+
+            this.mesh = new Line2(this.geometry, this.material);
+            this.mesh.computeLineDistances();
+            scene.add(this.mesh);
+
+            // Pads
+            this.padMaterial = new THREE.MeshBasicMaterial({
+                map: tipMistTex,
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                opacity: 0.0,
+                depthWrite: false, side: THREE.DoubleSide,
+                color: new THREE.Color(state.tipColor)
+            });
+            this.pad = new THREE.Mesh(padGeometry, this.padMaterial);
+            scene.add(this.pad);
+
+            this.coreMaterial = new THREE.MeshBasicMaterial({
+                map: coreMistTex,
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                opacity: 0.0,
+                depthWrite: false, side: THREE.DoubleSide,
+                color: new THREE.Color(state.innerGasColor) // UPDATED: Linked to innerGasColor (Red default)
+            });
+            this.corePad = new THREE.Mesh(padGeometry, this.coreMaterial);
+            scene.add(this.corePad);
+
+            this.respawn();
+            
+            // FIX: Initial update to ensure geometry matches state
+            this.update(0);
+        }
+
+        respawn() {
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            this.target.setFromSphericalCoords(state.radius, phi, theta);
+            this.currentEnd.copy(this.target);
+            this.lift = 0;
+            this.maxLift = 2.0 + Math.random() * 4.0;
+            this.phase = Math.random() * 100;
+
+            this.pad.rotation.z = Math.random() * Math.PI; 
+            const scale = 3 + Math.random() * 3;
+            this.pad.scale.set(scale, scale, 1);
+            this.corePad.rotation.z = Math.random() * Math.PI;
+            this.corePad.scale.set(2, 2, 1);
+        }
+
+        update(time) {
+            // Update material width dynamically
+            if(this.material.linewidth !== state.strandWidth) {
+                this.material.linewidth = state.strandWidth;
+            }
+
+            this.lift += state.riseSpeed; 
+            if (this.lift > this.maxLift || Math.random() < 0.01) this.respawn();
+            
+            this.pad.position.copy(this.currentEnd); 
+            this.pad.lookAt(0, 0, 0); 
+            this.padMaterial.opacity = 0.1 + Math.sin(time * 15 + this.phase) * 0.05;
+            this.padMaterial.color.set(state.tipColor);
+            
+            const dir = this.currentEnd.clone().normalize();
+            this.corePad.position.copy(dir).multiplyScalar(state.electrodeSize); 
+            this.corePad.lookAt(0, 0, 0);
+            this.coreMaterial.opacity = 0.1 + Math.sin(time * 20 + this.phase) * 0.05;
+            this.coreMaterial.color.set(state.innerGasColor); // UPDATED: Keep core pads synced to Red (or gas color)
+
+            const start = new THREE.Vector3(0, 0, 0);
+            const end = this.currentEnd;
+            
+            const cBase = new THREE.Color(state.baseColor);
+            const cTip = new THREE.Color(state.tipColor);
+            
+            const count = state.segments;
+            
+            // Reset arrays
+            this.positions = [];
+            this.colors = [];
+
+            const volatility = state.magnetism / 20; 
+
+            for (let i = 0; i < count; i++) {
+                const t = i / (count - 1);
+                
+                let env = Math.sin(t * Math.PI);
+                let x = start.x + (end.x - start.x) * t;
+                let y = start.y + (end.y - start.y) * t;
+                let z = start.z + (end.z - start.z) * t;
+
+                // Apply lift
+                y += env * this.lift;
+                
+                // Apply Volatility/Jitter & Wiggle
+                const wiggle = state.strandWiggle;
+                x += Math.sin(t * 10 + time * (3 + volatility) + this.phase) * 0.4 * env * (1 + volatility * 0.5) * wiggle;
+                z += Math.cos(t * 12 + time * (2 + volatility) + this.phase) * 0.4 * env * (1 + volatility * 0.5) * wiggle;
+
+                // CLAMPING LOGIC
+                const distSq = x*x + y*y + z*z;
+                const maxRad = state.radius - 0.1;
+                if (distSq > maxRad * maxRad) {
+                    const scale = maxRad / Math.sqrt(distSq);
+                    x *= scale;
+                    y *= scale;
+                    z *= scale;
+                }
+
+                this.positions.push(x, y, z);
+                
+                const gradientT = Math.pow(t, 1.8); 
+                const mixed = cBase.clone().lerp(cTip, gradientT);
+                if(t > 0.95) { mixed.addScalar(0.8); }
+                
+                this.colors.push(mixed.r, mixed.g, mixed.b);
+            }
+            
+            // Update Line2 Geometry
+            this.geometry.setPositions(this.positions);
+            this.geometry.setColors(this.colors);
+        }
+
+        dispose() {
+            scene.remove(this.mesh); scene.remove(this.pad); scene.remove(this.corePad);
+            this.geometry.dispose(); this.material.dispose();
+            this.pad.geometry.dispose(); this.padMaterial.dispose();
+            this.corePad.geometry.dispose(); this.coreMaterial.dispose();
+        }
+
+        setVisible(vis) {
+            this.mesh.visible = vis; this.pad.visible = vis; this.corePad.visible = vis;
+        }
+    }
+
+    class MasterThickBolt {
+        constructor() {
+            this.segmentCount = 64;
+            // Radius now controlled by state.boltWidth
+            this.material = new THREE.ShaderMaterial({
+                uniforms: {
+                    uBaseColor: { value: new THREE.Color(state.baseColor) },
+                    uTipColor: { value: new THREE.Color(state.tipColor) }
+                },
+                vertexShader: `
+                    varying vec2 vUv;
+                    void main() {
+                        vUv = uv;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    uniform vec3 uBaseColor;
+                    uniform vec3 uTipColor;
+                    varying vec2 vUv;
+                    void main() {
+                        float t = vUv.x;
+                        float gradientT = pow(t, 1.8);
+                        vec3 col = mix(uBaseColor, uTipColor, gradientT);
+                        if (t > 0.95) col += vec3(0.8);
+                        float core = abs(vUv.y - 0.5);
+                        float brightness = 1.0 + (1.0 - core) * 0.5;
+                        gl_FragColor = vec4(col * brightness, 1.0); 
+                    }
+                `,
+                blending: THREE.AdditiveBlending,
+                transparent: true,
+                side: THREE.DoubleSide
+            });
+            this.mesh = new THREE.Mesh(new THREE.BufferGeometry(), this.material);
+            scene.add(this.mesh);
+        }
+
+        update(time, targetPoint) {
+            this.material.uniforms.uBaseColor.value.set(state.baseColor);
+            this.material.uniforms.uTipColor.value.set(state.tipColor);
+
+            const start = new THREE.Vector3(0,0,0);
+            const end = targetPoint.clone();
+            const curvePoints = [];
+
+            for(let i=0; i <= this.segmentCount; i++) {
+                const t = i / this.segmentCount;
+                const env = Math.sin(t * Math.PI); 
+                let pos = new THREE.Vector3().lerpVectors(start, end, t);
+                const snap = Math.floor(time * 40.0); 
+                pos.x += MasterBoltJitter.warpX * env * Math.pow(t, 0.4);
+                pos.y += MasterBoltJitter.warpY * env * Math.pow(t, 0.4);
+                pos.z += MasterBoltJitter.warpZ * env * Math.pow(t, 0.4);
+                pos.x += (Math.sin(t * 50 + snap) + (Math.random()-0.5)) * 0.15 * env;
+                pos.z += (Math.cos(t * 50 + snap) + (Math.random()-0.5)) * 0.15 * env;
+                curvePoints.push(pos);
+            }
+
+            const curve = new THREE.CatmullRomCurve3(curvePoints);
+            if (this.mesh.geometry) this.mesh.geometry.dispose();
+            
+            // Use state.boltWidth here
+            this.mesh.geometry = new THREE.TubeGeometry(curve, 64, state.boltWidth, 4, false);
+        }
+
+        setVisible(vis) { this.mesh.visible = vis; }
+    }
+
+    // --- SCENE BUILDER ---
+
+    function buildSceneObjects() {
+        // 1. Glass
+        if(glassGlobe) { scene.remove(glassGlobe); glassGlobe.geometry.dispose(); }
+        glassGeometry = new THREE.SphereGeometry(state.radius + 0.2, 64, 64);
+        
+        glassMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                uTint: { value: new THREE.Color(state.glassColor) }
+            },
+            vertexShader: `
+                varying vec3 vNormal;
+                varying vec3 vViewPosition;
+                void main() {
+                    vNormal = normalize(normalMatrix * normal);
+                    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                    vViewPosition = -mvPosition.xyz;
+                    gl_Position = projectionMatrix * mvPosition;
+                }
+            `,
+            fragmentShader: `
+                uniform vec3 uTint;
+                varying vec3 vNormal;
+                varying vec3 vViewPosition;
+                void main() {
+                    vec3 normal = normalize(vNormal);
+                    vec3 viewDir = normalize(vViewPosition);
+                    float dotProduct = dot(normal, viewDir);
+                    float rim = 1.0 - max(dotProduct, 0.0);
+                    rim = pow(rim, 3.5); 
+                    gl_FragColor = vec4(uTint, rim * 0.1); 
+                }
+            `,
+            blending: THREE.AdditiveBlending,
+            transparent: true,
+            side: THREE.FrontSide,
+            depthWrite: false
+        });
+        glassGlobe = new THREE.Mesh(glassGeometry, glassMaterial);
+        scene.add(glassGlobe);
+
+        // 1b. Electrode
+        if (electrode) { scene.remove(electrode); electrode.geometry.dispose(); }
+        electrode = new THREE.Mesh(
+            new THREE.SphereGeometry(state.electrodeSize, 32, 32),
+            new THREE.MeshBasicMaterial({ color: 0x000000 })
+        );
+        scene.add(electrode);
+
+        // 2. Hit Sphere for Raycast
+        hitSphere.geometry.dispose();
+        hitSphere.geometry = new THREE.SphereGeometry(state.radius, 16, 16);
+
+        // 3. Strands - Recreate completely to respect new Segments count
+        strands.forEach(s => s.dispose());
+        strands = [];
+        for(let i=0; i<state.strands; i++) strands.push(new PlasmaBolt());
+
+        // 4. Master Bolt
+        if(!masterThickBolt) masterThickBolt = new MasterThickBolt();
+
+        // 5. Interaction Materials
+        if(masterTipMesh) { scene.remove(masterTipMesh); masterTipMesh.geometry.dispose(); }
+        if(innerGasMesh) { scene.remove(innerGasMesh); innerGasMesh.geometry.dispose(); }
+
+        organicTipMat = new THREE.ShaderMaterial({
+            uniforms: {
+                uColor: { value: new THREE.Color(state.tipColor) }, 
+                uTime: { value: 0 },
+                uOpacity: { value: 0.0 },
+                uTouchPos: { value: new THREE.Vector3() }
+            },
+            vertexShader: `
+                varying vec3 vWorldPos;
+                void main() {
+                    vec4 worldPos = modelMatrix * vec4(position, 1.0);
+                    vWorldPos = worldPos.xyz;
+                    gl_Position = projectionMatrix * viewMatrix * worldPos;
+                }
+            `,
+            fragmentShader: `
+                uniform vec3 uColor;
+                uniform vec3 uTouchPos;
+                uniform float uTime;
+                uniform float uOpacity;
+                varying vec3 vWorldPos;
+                void main() {
+                    float dist = distance(vWorldPos, uTouchPos);
+                    float noise = sin(dist * 1.5 - uTime * 5.0) * 0.12;
+                    float alpha = smoothstep(5.5 + noise, 0.0, dist);
+                    float core = smoothstep(1.3, 0.0, dist);
+                    float finalAlpha = (alpha * 0.3) + (core * 0.35);
+                    gl_FragColor = vec4(uColor, finalAlpha * uOpacity);
+                }
+            `,
+            transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: false, side: THREE.FrontSide
+        });
+        masterTipMesh = new THREE.Mesh(new THREE.SphereGeometry(state.radius - 0.1, 64, 64), organicTipMat);
+        scene.add(masterTipMesh);
+
+        innerGasMat = new THREE.ShaderMaterial({
+            uniforms: {
+                uColor: { value: new THREE.Color(state.innerGasColor) },
+                uTime: { value: 0 },
+                uOpacity: { value: 0.0 },
+                uHitPos: { value: new THREE.Vector3() },
+                uSqueeze: { value: 1.0 }
+            },
+            vertexShader: `
+                varying vec3 vPosition;
+                void main() {
+                    vPosition = position; 
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                uniform vec3 uColor;
+                uniform vec3 uHitPos;
+                uniform float uTime;
+                uniform float uOpacity;
+                uniform float uSqueeze;
+                varying vec3 vPosition;
+                float hash(vec3 p) {
+                    p  = fract( p*0.3183099 + .1 );
+                    p *= 17.0;
+                    return fract( p.x*p.y*p.z*(p.x+p.y+p.z) );
+                }
+                float noise( in vec3 x ) {
+                    vec3 i = floor(x);
+                    vec3 f = fract(x);
+                    f = f*f*(3.0-2.0*f);
+                    return mix(mix(mix( hash(i+vec3(0,0,0)), hash(i+vec3(1,0,0)),f.x),
+                                   mix( hash(i+vec3(0,1,0)), hash(i+vec3(1,1,0)),f.x),f.y),
+                               mix(mix( hash(i+vec3(0,0,1)), hash(i+vec3(1,0,1)),f.x),
+                                   mix( hash(i+vec3(0,1,1)), hash(i+vec3(1,1,1)),f.x),f.y),f.z);
+                }
+                void main() {
+                    float dist = distance(vPosition, uHitPos);
+                    float falloff = smoothstep(uSqueeze, 0.0, dist);
+                    float n = noise(vPosition * 3.0 + vec3(0.0, uTime * 4.0, 0.0));
+                    float density = falloff * (0.3 + 0.7 * n);
+                    gl_FragColor = vec4(uColor, density * uOpacity);
+                }
+            `,
+            transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, depthTest: true, side: THREE.FrontSide
+        });
+        innerGasMesh = new THREE.Mesh(new THREE.SphereGeometry(state.electrodeSize + 0.05, 64, 64), innerGasMat);
+        scene.add(innerGasMesh);
+
+        // Bloom Update
+        bloomPass.strength = state.bloomStrength;
+        bloomPass.radius = state.bloomRadius;
+        bloomPass.threshold = state.bloomThreshold;
+        
+        // Update Controls
+        controls.autoRotateSpeed = state.rotateSpeed;
+    }
+
+    // --- ANIMATION & INTERACTION ---
+
+    const clock = new THREE.Clock();
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    let isInteracting = false;
+    let interactionPoint = new THREE.Vector3();
+
+    function handleInput(x, y, isDown) {
+        if(document.getElementById('settings-panel').classList.contains('open')) {
+            return;
+        }
+
+        const rect = renderer.domElement.getBoundingClientRect();
+        mouse.x = ((x - rect.left) / rect.width) * 2 - 1;
+        mouse.y = -((y - rect.top) / rect.height) * 2 + 1;
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObject(hitSphere);
+        
+        if (intersects.length > 0) {
+            document.body.style.cursor = 'pointer';
+            if (isDown) {
+                isInteracting = true;
+                interactionPoint.copy(intersects[0].point);
+            }
+        } else {
+            document.body.style.cursor = 'default';
+        }
+        
+        if (!isDown) isInteracting = false;
+    }
+
+    // --- LOGIC ---
+
+    function animate() {
+        requestAnimationFrame(animate);
+        
+        // Manual time accumulation for speed control
+        const delta = clock.getDelta();
+        globalTime += delta * state.simulationSpeed;
+
+        controls.update();
+        MasterBoltJitter.update(globalTime);
+
+        if (isInteracting) {
+            strands.forEach(s => s.setVisible(false));
+            masterThickBolt.setVisible(true);
+            
+            const jitter = new THREE.Vector3(
+                (Math.random() - 0.5) * 1.5, (Math.random() - 0.5) * 1.5, (Math.random() - 0.5) * 1.5
+            );
+            const displayPoint = interactionPoint.clone().add(jitter);
+            masterThickBolt.update(globalTime, displayPoint);
+
+            masterTipMesh.visible = true;
+            organicTipMat.uniforms.uTouchPos.value.copy(displayPoint);
+            organicTipMat.uniforms.uTime.value = globalTime;
+            organicTipMat.uniforms.uOpacity.value = 0.4 + Math.sin(globalTime * 12.0) * 0.1;
+            organicTipMat.uniforms.uColor.value.set(state.tipColor);
+
+            const surfaceJitter = new THREE.Vector3(Math.random()-0.5, Math.random()-0.5, Math.random()-0.5).multiplyScalar(0.2);
+            const innerHit = interactionPoint.clone().add(surfaceJitter).normalize().multiplyScalar(state.electrodeSize + 0.05);
+            
+            innerGasMesh.visible = true;
+            innerGasMat.uniforms.uHitPos.value.copy(innerHit);
+            innerGasMat.uniforms.uTime.value = globalTime;
+            innerGasMat.uniforms.uSqueeze.value = 1.0 + Math.random() * 0.8;
+            innerGasMat.uniforms.uOpacity.value = 0.6 + Math.random() * 0.1;
+            innerGasMat.uniforms.uColor.value.set(state.innerGasColor);
+
+        } else {
+            strands.forEach(s => {
+                s.setVisible(true);
+                s.update(globalTime);
+            });
+            masterThickBolt.setVisible(false);
+            masterTipMesh.visible = false;
+            innerGasMesh.visible = false;
+        }
+
+        composer.render();
+        checkAutoAdvance(globalTime);
+    }
+
+    // --- UI GENERATOR ---
+
+    function createControl(key, label, type, min, max, step) {
+        const div = document.createElement('div');
+        div.className = 'control-group';
+        
+        if (type === 'range') {
+            const header = document.createElement('div');
+            header.className = 'control-header';
+            
+            const labelEl = document.createElement('label');
+            labelEl.innerText = label;
+            
+            const valueDisplay = document.createElement('span');
+            valueDisplay.className = 'value-display';
+            valueDisplay.innerText = typeof state[key] === 'number' ? state[key].toFixed(2) : state[key];
+
+            header.appendChild(labelEl);
+            header.appendChild(valueDisplay);
+            div.appendChild(header);
+
+            const input = document.createElement('input');
+            input.type = 'range'; 
+            input.min = min; input.max = max; input.step = step; input.value = state[key];
+            
+            input.oninput = (e) => { 
+                state[key] = parseFloat(e.target.value); 
+                valueDisplay.innerText = state[key].toFixed(2);
+                updateSceneLive();
+            };
+            input.onchange = () => buildSceneObjects(); 
+            div.appendChild(input);
+
+        } else if (type === 'color') {
+            div.className = 'color-wrapper';
+            const labelEl = document.createElement('label');
+            labelEl.innerText = label;
+            labelEl.style.margin = '0';
+            labelEl.style.color = '#fff';
+
+            const input = document.createElement('input');
+            input.type = 'color'; input.value = state[key];
+            input.oninput = (e) => {
+                state[key] = e.target.value;
+                updateSceneLive();
+            };
+            input.onchange = () => buildSceneObjects();
+            
+            div.appendChild(labelEl);
+            div.appendChild(input);
+        }
+        return div;
+    }
+
+    function initUI() {
+        const c = document.getElementById('controls-container');
+        c.innerHTML = '';
+        
+        // --- Sector 1: Simulation ---
+        let header = document.createElement('div');
+        header.className = 'section-header'; header.innerText = 'SIMULATION SECTOR';
+        c.appendChild(header);
+
+        c.appendChild(createControl('simulationSpeed', 'Time Dilation', 'range', 0.1, 3.0, 0.1));
+        c.appendChild(createControl('riseSpeed', 'Thermal Uplift', 'range', 0.01, 0.3, 0.01));
+        c.appendChild(createControl('magnetism', 'Volatility Index', 'range', 0, 100, 1)); 
+        c.appendChild(createControl('rotateSpeed', 'Auto-Rotate', 'range', 0, 2.0, 0.1));
+
+        // --- Sector 2: Geometry ---
+        header = document.createElement('div');
+        header.className = 'section-header'; header.innerText = 'GEOMETRY SECTOR';
+        c.appendChild(header);
+
+        c.appendChild(createControl('radius', 'Containment Radius', 'range', 5, 20, 0.5));
+        c.appendChild(createControl('electrodeSize', 'Core Diameter', 'range', 0.5, 4.0, 0.1));
+        c.appendChild(createControl('strands', 'Filament Count', 'range', 10, 80, 1));
+        c.appendChild(createControl('segments', 'Filament Resolution', 'range', 20, 100, 1));
+        
+        // --- Sector 3: Visuals ---
+        header = document.createElement('div');
+        header.className = 'section-header'; header.innerText = 'VISUAL OUTPUT';
+        c.appendChild(header);
+
+        c.appendChild(createControl('strandWidth', 'Filament Width', 'range', 0.01, 0.3, 0.01));
+        c.appendChild(createControl('strandWiggle', 'Turbulence', 'range', 0.0, 3.0, 0.1));
+        c.appendChild(createControl('boltWidth', 'Touch Arc Width', 'range', 0.01, 0.5, 0.01));
+        c.appendChild(createControl('bloomStrength', 'Bloom Intensity', 'range', 0, 4, 0.1));
+        c.appendChild(createControl('bloomRadius', 'Bloom Radius', 'range', 0, 1.5, 0.05));
+        
+        // --- Sector 4: Colors ---
+        header = document.createElement('div');
+        header.className = 'section-header'; header.innerText = 'CHROMATICS';
+        c.appendChild(header);
+
+        c.appendChild(createControl('baseColor', 'Base Energy', 'color'));
+        c.appendChild(createControl('tipColor', 'Tip Energy', 'color'));
+        c.appendChild(createControl('innerGasColor', 'Core Gas', 'color'));
+        c.appendChild(createControl('glassColor', 'Glass Tint', 'color'));
+
+        // Update auto fields
+        document.getElementById('chk-auto').checked = state.autoAdvance;
+        document.getElementById('inp-timer').value = state.autoInterval;
+        document.getElementById('val-timer').innerText = state.autoInterval;
+    }
+
+    function updateSceneLive() {
+        // Fast updates
+        bloomPass.strength = state.bloomStrength;
+        bloomPass.radius = state.bloomRadius;
+        bloomPass.threshold = state.bloomThreshold;
+        controls.autoRotateSpeed = state.rotateSpeed;
+        
+        // Ensure electrode size never exceeds radius (live update safeguard)
+        if(state.electrodeSize > state.radius - 2.0) {
+            state.electrodeSize = state.radius - 2.0;
+        }
+    }
+
+    function updateUIValues() {
+        // Refresh inputs when state changes programmatically
+        initUI();
+    }
+
+    // --- TRANSITION SYSTEM ---
+
+    const overlay = document.getElementById('fade-overlay');
+
+    function triggerRandomization() {
+        // 1. Fade Out
+        overlay.style.opacity = 1;
+        
+        setTimeout(() => {
+            // 2. Randomize State
+            randomizeState();
+            
+            // 3. Rebuild
+            buildSceneObjects();
+            updateUIValues();
+            
+            // 4. Fade In
+            setTimeout(() => {
+                overlay.style.opacity = 0;
+            }, 100);
+        }, 600);
+    }
+
+    function randomizeState() {
+        // Geometry - 2 decimal places truncation
+        state.radius = parseFloat((10 + Math.random() * 8).toFixed(2));
+        state.strands = Math.floor(20 + Math.random() * 40); // Fewer strands for performance
+        state.electrodeSize = parseFloat((1.0 + Math.random() * 2.5).toFixed(2));
+        
+        // Safety Clamp for Randomized Electrode
+        if (state.electrodeSize > state.radius - 2.0) {
+            state.electrodeSize = parseFloat((state.radius - 2.0).toFixed(2));
+        }
+        
+        // Physics
+        state.magnetism = parseFloat((Math.random() * 60).toFixed(2));
+        state.simulationSpeed = parseFloat((0.5 + Math.random() * 1.5).toFixed(2));
+        state.riseSpeed = parseFloat((0.04 + Math.random() * 0.1).toFixed(2));
+        state.rotateSpeed = parseFloat((Math.random() * 1.0).toFixed(2));
+        
+        // Visuals
+        state.strandWidth = parseFloat((0.02 + Math.random() * 0.08).toFixed(2));
+        state.strandWiggle = parseFloat((0.5 + Math.random() * 1.5).toFixed(2));
+        state.boltWidth = parseFloat((0.04 + Math.random() * 0.15).toFixed(2));
+        state.bloomStrength = parseFloat((0.5 + Math.random() * 2.5).toFixed(2));
+        state.bloomRadius = parseFloat((0.1 + Math.random() * 0.8).toFixed(2));
+
+        // Colors
+        state.baseColor = '#' + new THREE.Color(Math.random(), Math.random(), Math.random()).getHexString();
+        state.tipColor = '#' + new THREE.Color(Math.random(), Math.random(), Math.random()).getHexString();
+        state.innerGasColor = '#' + new THREE.Color(Math.random(), Math.random(), Math.random()).getHexString();
+        
+        // Randomize glass tint
+        const gCol = new THREE.Color().setHSL(Math.random(), Math.random() * 0.5, 0.5 + Math.random() * 0.5);
+        state.glassColor = '#' + gCol.getHexString();
+        
+        // Constant
+        state.segments = 60;
+    }
+
+    // --- AUTO ADVANCE ---
+
+    let lastAutoTime = 0;
+    function checkAutoAdvance(time) {
+        if(!state.autoAdvance) { lastAutoTime = time; return; }
+        if(time - lastAutoTime > state.autoInterval) {
+            triggerRandomization();
+            lastAutoTime = time;
+        }
+    }
+
+    // --- EVENT LISTENERS ---
+
+    // 1. Window
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        composer.setSize(window.innerWidth, window.innerHeight);
+        
+        // Line2 Resolution Update
+        strands.forEach(s => {
+            if(s.material) s.material.resolution.set(window.innerWidth, window.innerHeight);
+        });
+    });
+
+    // 2. Interaction Detectors
+    let lastTap = 0;
+    let mouseDownPos = new THREE.Vector2();
+    let isDragging = false;
+    
+    const canvasEl = document.getElementById('canvas-container');
+    const menuEl = document.getElementById('settings-panel');
+    const menuBtn = document.getElementById('menu-btn');
+
+    // Desktop Click vs Pan
+    canvasEl.addEventListener('mousedown', (e) => {
+        // Close menu if open
+        if(menuEl.classList.contains('open')) {
+            toggleMenu(false);
+            return;
+        }
+        
+        mouseDownPos.set(e.clientX, e.clientY);
+        isDragging = false;
+        
+        // Handle Interaction immediately on down
+        handleInput(e.clientX, e.clientY, true);
+    });
+
+    window.addEventListener('mousemove', e => {
+        const dist = Math.hypot(e.clientX - mouseDownPos.x, e.clientY - mouseDownPos.y);
+        if(dist > 5) isDragging = true;
+        
+        // Pass to physics if dragging interaction
+        if(isInteracting) handleInput(e.clientX, e.clientY, true);
+    });
+
+    window.addEventListener('mouseup', (e) => {
+        handleInput(0,0,false);
+
+        // Only randomize if NOT dragging and NOT interacting with globe
+        if(!isDragging && !isInteracting) {
+            // Check Raycast one last time to be sure we clicked background
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            if(raycaster.intersectObject(hitSphere).length === 0) {
+                triggerRandomization();
+            }
+        }
+    });
+
+    // Touch Handling
+    canvasEl.addEventListener('touchstart', (e) => {
+        const now = Date.now();
+        const touch = e.touches[0];
+
+        if(menuEl.classList.contains('open')) {
+            e.preventDefault(); // Stop propagation
+            toggleMenu(false);
+            return;
+        }
+
+        // Double Tap Detection
+        if (now - lastTap < 300) {
+             // Check if hitting background
+            const rect = renderer.domElement.getBoundingClientRect();
+            mouse.x = ((touch.clientX - rect.left) / rect.width) * 2 - 1;
+            mouse.y = -((touch.clientY - rect.top) / rect.height) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            if(raycaster.intersectObject(hitSphere).length === 0) {
+                triggerRandomization();
+            }
+        }
+        lastTap = now;
+        handleInput(touch.clientX, touch.clientY, true);
+    }, {passive: false});
+
+    canvasEl.addEventListener('touchmove', (e) => {
+        e.preventDefault(); // Prevent scroll
+        handleInput(e.touches[0].clientX, e.touches[0].clientY, true);
+    }, {passive: false});
+
+    window.addEventListener('touchend', () => handleInput(0,0,false));
+
+    // 3. UI Buttons
+    function toggleMenu(force) {
+        const isOpen = menuEl.classList.contains('open');
+        const shouldOpen = force !== undefined ? force : !isOpen;
+        if(shouldOpen) {
+            menuEl.classList.add('open');
+            menuBtn.classList.add('hidden');
+        } else {
+            menuEl.classList.remove('open');
+            menuBtn.classList.remove('hidden');
+        }
+    }
+
+    menuBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleMenu(); });
+    document.getElementById('panel-close').addEventListener('click', () => toggleMenu(false));
+    
+    // Key Handling
+    window.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape') {
+            const modal = document.getElementById('info-modal');
+            if(modal.classList.contains('active')) {
+                modal.classList.remove('active');
+            } else {
+                toggleMenu(false);
+            }
+        }
+    });
+
+    // Panel Actions
+    document.getElementById('btn-randomize').addEventListener('click', triggerRandomization);
+    document.getElementById('btn-reset').addEventListener('click', () => {
+        state = { ...DEFAULTS };
+        // Force UI update to match defaults
+        buildSceneObjects();
+        updateUIValues();
+    });
+
+    document.getElementById('btn-wallpaper').addEventListener('click', () => {
+        const w = 3840, h = 2160;
+        const oldW = window.innerWidth, oldH = window.innerHeight;
+        renderer.setSize(w, h);
+        camera.aspect = w / h; camera.updateProjectionMatrix();
+        composer.setSize(w, h);
+        
+        composer.render(); // Draw 4K frame
+        
+        const link = document.createElement('a');
+        link.download = `Plasma_Globe_4K_${Date.now()}.png`;
+        link.href = renderer.domElement.toDataURL('image/png');
+        link.click();
+
+        // Restore
+        renderer.setSize(oldW, oldH);
+        camera.aspect = oldW / oldH; camera.updateProjectionMatrix();
+        composer.setSize(oldW, oldH);
+    });
+
+    // Info Modal
+    document.getElementById('btn-info').addEventListener('click', () => {
+        document.getElementById('info-modal').classList.add('active');
+    });
+    // Close on background click
+    document.getElementById('info-modal').addEventListener('click', (e) => {
+        if(e.target.id === 'info-modal') document.getElementById('info-modal').classList.remove('active');
+    });
+
+    // Auto Advance
+    document.getElementById('chk-auto').addEventListener('change', (e) => {
+        state.autoAdvance = e.target.checked;
+        lastAutoTime = clock.getElapsedTime();
+    });
+    document.getElementById('inp-timer').addEventListener('input', (e) => {
+        state.autoInterval = parseInt(e.target.value);
+        document.getElementById('val-timer').innerText = state.autoInterval;
+    });
+
+    // Import/Export
+    document.getElementById('btn-export-json').addEventListener('click', () => {
+        const data = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+        const a = document.createElement('a');
+        const date = new Date().toISOString().replace(/[:.]/g, '-');
+        a.href = data;
+        a.download = `PlasmaGlobe_Settings_${date}.json`;
+        a.click();
+    });
+
+    document.getElementById('btn-import-json').addEventListener('click', () => {
+        document.getElementById('file-input').click();
+    });
+
+    document.getElementById('file-input').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            try {
+                const newState = JSON.parse(evt.target.result);
+                state = { ...state, ...newState }; // Merge to ensure new keys exist
+                buildSceneObjects();
+                updateUIValues();
+            } catch(err) {
+                alert("Invalid Settings File");
+            }
+        };
+        reader.readAsText(file);
+    });
+
+    // --- INITIALIZATION ---
+    
+    // NO RANDOMIZATION ON STARTUP - Use Defaults
+    buildSceneObjects();
+    initUI();
+    
+    // Start loop
+    animate();
+    
+    // Fade in
+    setTimeout(() => { overlay.style.opacity = 0; }, 500);
+
+</script>
+
+</body></html>
